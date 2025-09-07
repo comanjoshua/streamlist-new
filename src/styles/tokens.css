@@ -1,0 +1,18 @@
+:root {
+/* Palette */
+--bg: #0b0d12; /* deep slate */
+--surface: #0f131a;
+--surface-2: #161b24;
+--border: #232a35;
+--text: #d4dae3;
+--text-muted: #9aa5b1;
+--text-strong: #ffffff;
+--accent: #3b82f6; /* blue-500 */
+--success: #10b981; /* emerald-500 */
+
+
+/* Spacing */
+--space-1: .25rem; --space-2: .5rem; --space-3: .75rem; --space-4: 1rem; --space-5: 1.5rem;
+--radius: 12px;
+--container: 1100px;
+}
