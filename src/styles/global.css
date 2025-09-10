@@ -1,0 +1,249 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Smooth transitions when toggling dark/light */
+html {
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* Base reset */
+body {
+  @apply font-sans antialiased;
+  margin: 0;
+  padding: 0;
+}
+
+/* Page base */
+.page {
+  padding: 1.5rem;
+}
+
+/* Framed box style */
+.page--box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 1rem; /* rounded corners */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+:root {
+  --surface: #ffffff;
+  --surface-2: #f3f4f6;
+  --border: #d1d5db;
+  --text: #111827;
+  --text-strong: #000000;
+  --accent: #2563eb;
+}
+
+.dark {
+  --surface: #1f2937;
+  --surface-2: #374151;
+  --border: #4b5563;
+  --text: #d1d5db;
+  --text-strong: #ffffff;
+  --accent: #3b82f6;
+}
+
+body {
+  background-color: var(--surface);
+  color: var(--text);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* Grid layout for search results */
+.search-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.movie-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.movie-card img {
+  width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.movie-card h2 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.movie-card p {
+  font-size: 0.85rem;
+  margin: 0.25rem 0;
+  color: var(--text);
+}
+
+/* Limit overview length */
+.movie-card .overview {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;   /* show max 3 lines */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 0.5rem;
+}
+
+/* Buttons inside card */
+.movie-card .actions {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: auto;
+}
+/* Buttons - base style */
+.btn {
+  background: var(--btn-bg);
+  color: var(--btn-text);
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+/* Hover */
+.btn:hover {
+  background: var(--btn-hover);
+}
+
+/* Disabled */
+.btn:disabled {
+  background: var(--btn-disabled);
+  color: var(--text);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* Danger variant */
+.btn.danger {
+  background: #dc2626; /* red */
+  color: #fff;
+}
+.btn.danger:hover {
+  background: #b91c1c;
+}
+
+/* ---- Theme variables ---- */
+
+/* Light mode buttons */
+:root {
+  --btn-bg: #e5e7eb;       /* light gray (tailwind gray-200) */
+  --btn-hover: #d1d5db;    /* slightly darker gray */
+  --btn-disabled: #f3f4f6; /* very light gray */
+  --btn-text: #111827;     /* dark text */
+}
+
+/* Dark mode buttons */
+.dark {
+  --btn-bg: #3b82f6;       /* blue-500 */
+  --btn-hover: #2563eb;    /* blue-600 */
+  --btn-disabled: #1e40af; /* muted blue */
+  --btn-text: #ffffff;
+}
+
+/* Cart layout */
+.cart-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+.cart-card {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  background: var(--surface);
+  margin-bottom: 1rem;
+}
+
+/* Thumbnail */
+.thumb-wrap img {
+  width: 100px;
+  border-radius: 0.5rem;
+  object-fit: cover;
+}
+
+/* Info */
+.cart-info {
+  flex: 1;
+}
+
+.cart-info h3 {
+  margin: 0 0 0.25rem;
+  font-weight: 600;
+}
+
+.cart-info .price {
+  font-weight: 700;
+  margin: 0.25rem 0;
+}
+
+/* Stepper */
+/* Stepper controls */
+.stepper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0.75rem 0;
+}
+
+.stepper button {
+  background: var(--btn-bg);
+  color: var(--btn-text);
+  border: none;
+  border-radius: 0.5rem;
+  width: 2rem;
+  height: 2rem;
+  cursor: pointer;
+  font-size: 1.2rem;
+  font-weight: 600;
+  transition: background 0.2s ease;
+}
+
+.stepper button:hover {
+  background: var(--btn-hover);
+}
+
+.stepper button:disabled {
+  background: var(--btn-disabled);
+  color: var(--text);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* Summary box */
+.cart-summary {
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  background: var(--surface-2);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}

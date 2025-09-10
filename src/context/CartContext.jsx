@@ -1,63 +1,84 @@
-// src/context/CartContext.jsx
-import React, { createContext, useMemo, useReducer } from 'react';
-import { useLocalStorage } from '../hooks/useLocalStorage';
-import { config } from '../app/config';
+import React, { createContext, useContext, useReducer } from "react";
 
-const CartContext = createContext(null);
-
-const INITIAL = { items: [] }; // { id, title, price, type, qty, image }
+const CartCtx = createContext(null);
 
 function reducer(state, action) {
   switch (action.type) {
-    case 'ADD': {
-      const { item } = action;
-      const items = [...state.items];
-      const idx = items.findIndex((i) => i.id === item.id);
-      if (idx >= 0) {
-        items[idx] = { ...items[idx], qty: items[idx].qty + (item.qty || 1) };
-      } else {
-        items.push({ ...item, qty: item.qty || 1 });
+    case "add": {
+      const item = action.item;
+
+      // Only one subscription allowed, qty = 1
+      if (item.type === "subscription") {
+        const hasSub = state.find((i) => i.type === "subscription");
+        if (hasSub) return state;
+        return [...state, { ...item, qty: 1 }];
       }
-      return { ...state, items };
+
+      // If accessory exists, bump qty
+      const existing = state.find((i) => i.id === item.id && i.type !== "subscription");
+      if (existing) {
+        return state.map((i) =>
+          i.id === item.id ? { ...i, qty: (i.qty || 1) + (item.qty || 1) } : i
+        );
+      }
+
+      return [...state, { ...item, qty: item.qty || 1 }];
     }
-    case 'REMOVE':
-      return { ...state, items: state.items.filter((i) => i.id !== action.id) };
-    case 'SET_QTY':
-      return {
-        ...state,
-        items: state.items.map((i) =>
-          i.id === action.id ? { ...i, qty: Math.max(1, action.qty) } : i
-        ),
-      };
-    case 'CLEAR':
-      return { ...state, items: [] };
+
+    case "updateQty":
+      return state.map((i) =>
+        i.id === action.id
+          ? { ...i, qty: action.qty < 1 ? 1 : action.qty }
+          : i
+      );
+
+    case "remove":
+      return state.filter((x) => x.id !== action.id);
+
+    case "clear":
+      return [];
+
     default:
       return state;
   }
 }
 
-export function CartProvider({ children }) {
-  // Persistent state (works in browser; safe no-op in tests if jsdom present)
-  const [stored, setStored] = useLocalStorage(config.storageKey, INITIAL);
-  const [state, dispatch] = useReducer(reducer, stored || INITIAL);
-
-  // Persist every change
-  React.useEffect(() => {
-    setStored(state);
-  }, [state, setStored]);
-
-  const actions = useMemo(
-    () => ({
-      add: (item) => dispatch({ type: 'ADD', item }),
-      remove: (id) => dispatch({ type: 'REMOVE', id }),
-      setQty: (id, qty) => dispatch({ type: 'SET_QTY', id, qty }),
-      clear: () => dispatch({ type: 'CLEAR' }),
-    }),
-    []
-  );
-
-  const value = useMemo(() => ({ state, ...actions }), [state, actions]);
-  return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
+// 🔑 Load cart synchronously at startup
+function initCart() {
+  try {
+    const raw = localStorage.getItem("cart");
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
 }
 
-export default CartContext;
+export function CartProvider({ children }) {
+  const [items, dispatch] = useReducer(reducer, [], initCart);
+
+  // Save to localStorage whenever items change
+  React.useEffect(() => {
+    try {
+      localStorage.setItem("cart", JSON.stringify(items));
+    } catch (err) {
+      console.error("Error saving cart:", err);
+    }
+  }, [items]);
+
+  const api = {
+    items,
+    addItem: (item) => dispatch({ type: "add", item }),
+    updateQty: (id, qty) => dispatch({ type: "updateQty", id, qty }),
+    removeItem: (id) => dispatch({ type: "remove", id }),
+    clear: () => dispatch({ type: "clear" }),
+  };
+
+  return <CartCtx.Provider value={api}>{children}</CartCtx.Provider>;
+}
+
+export default function useCart() {
+  const ctx = useContext(CartCtx);
+  if (!ctx) throw new Error("useCart must be used inside CartProvider");
+  return ctx;
+}

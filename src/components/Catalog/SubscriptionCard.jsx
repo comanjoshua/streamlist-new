@@ -1,19 +1,27 @@
-import React from 'react';
-import { useCart } from '../../hooks/useCart';
-import { formatCurrency } from '../../utils/currency';
-import './Catalog.css';
+// src/components/Catalog/SubscriptionCard.jsx
+import React from "react";
+import useCart from "../../context/CartContext";
+import { formatCurrency } from "../../utils/currency";
+import "./Catalog.css";
 
 export default function SubscriptionCard({ plan }) {
-  const { state, add } = useCart();
-  const inCart = state.items.some((i) => i.id === plan.id); // already added?
+  const cart = useCart();
+  const inCart = cart.items.some(
+    (i) => i.id === plan.id && i.type === "subscription"
+  );
+  const hasOtherSub = cart.items.some(
+    (i) => i.type === "subscription" && i.id !== plan.id
+  );
+
+  const disabled = inCart || hasOtherSub;
 
   const handleAdd = () => {
-    if (inCart) return; // no-op if already in cart
-    add({
+    if (disabled) return;
+    cart.addItem({
       id: plan.id,
       title: plan.title,
       price: plan.price,
-      type: 'subscription',
+      type: "subscription",
       image: plan.image,
       qty: 1,
     });
@@ -21,13 +29,15 @@ export default function SubscriptionCard({ plan }) {
 
   return (
     <article className="card plan">
+      <img src={plan.image} alt={plan.title} className="thumb" />
       <h4>{plan.title}</h4>
       <p className="price">{formatCurrency(plan.price)} / mo</p>
-      <ul className="features">
-        {plan.features?.map((f) => <li key={f}>{f}</li>)}
-      </ul>
-      <button className="btn primary" onClick={handleAdd} disabled={inCart}>
-        {inCart ? 'Added (Limit 1)' : 'Add'}
+      <button
+        className={`btn ${disabled ? "disabled" : "primary"}`}
+        onClick={handleAdd}
+        disabled={disabled}
+      >
+        {inCart ? "Added" : "Add"}
       </button>
     </article>
   );

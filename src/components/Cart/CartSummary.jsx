@@ -1,5 +1,5 @@
 import React from 'react';
-import { useCart } from '../../hooks/useCart';
+import useCart from '../../hooks/useCart';
 import { calcSubtotal, calcTax, calcTotal, eligibleFreeShipping } from '../../utils/totals';
 import { formatCurrency } from '../../utils/currency';
 import './Cart.css';
@@ -7,7 +7,8 @@ import './Cart.css';
 
 export default function CartSummary() {
 const { state, clear } = useCart();
-const subtotal = calcSubtotal(state.items);
+const items = state.items || [];
+const subtotal = calcSubtotal(items);
 const tax = calcTax(subtotal);
 const total = calcTotal(subtotal, tax);
 
@@ -35,8 +36,8 @@ return (
 <p className="hint">Add more items to unlock free shipping.</p>
 )}
 <div className="actions">
-<button className="btn" onClick={clear} disabled={state.items.length === 0}>Clear cart</button>
-<button className="btn primary" disabled={state.items.length === 0}>Checkout</button>
+<button className="btn" onClick={clear} disabled={items.length === 0}>Clear cart</button>
+<button className="btn primary" disabled={items.length === 0}>Checkout</button>
 </div>
 </aside>
 );

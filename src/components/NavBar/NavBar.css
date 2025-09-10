@@ -1,7 +1,89 @@
-.nav { position: sticky; top: 0; z-index: 10; background: var(--surface); border-bottom: 1px solid var(--border); }
-.nav__inner { display: flex; align-items: center; justify-content: space-between; padding: var(--space-3) var(--space-4); }
-.brand { font-weight: 800; letter-spacing: 0.3px; color: var(--text-strong); }
-.nav__links { display: flex; gap: var(--space-3); }
-.nav__links a { padding: .4rem .7rem; border-radius: .5rem; color: var(--text); }
-.nav__links a.active, .nav__links a:hover { background: var(--surface-2); color: var(--text-strong); }
-.badge { margin-left: .4rem; background: var(--accent); color: white; border-radius: 1rem; padding: 0 .5rem; font-size: .8rem; }
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+
+.nav__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.brand {
+  font-weight: 800;
+  font-size: 1.4rem;
+  letter-spacing: 0.3px;
+  color: var(--text-strong);
+}
+
+.nav__right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Links */
+.nav__links {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.pill {
+  position: relative; /* ✅ for badge positioning */
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.4rem 0.7rem;
+  border-radius: 9999px;
+  color: var(--text);
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s;
+}
+
+.pill:hover {
+  background: var(--surface-2);
+  color: var(--text-strong);
+}
+
+.pill--active {
+  background: var(--surface-2);
+  color: var(--text-strong);
+  font-weight: 600;
+}
+
+/* Bug (badge) */
+.nav__bug {
+  position: absolute;
+  top: -0.3rem;
+  right: -0.4rem;
+  width: 1rem;
+  height: 1rem;
+  background: red;
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 700;
+  border-radius: 50%;      /* ✅ perfect circle */
+  text-align: center;
+  line-height: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 0 2px var(--surface); /* ring for contrast */
+}
+
+/* Theme toggle button */
+.themeToggle {
+  margin-left: 1rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

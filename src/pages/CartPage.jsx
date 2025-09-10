@@ -1,29 +1,85 @@
-import React from 'react';
-import { useCart } from '../hooks/useCart';
-import CartItem from '../components/Cart/CartItem.jsx';
-import CartSummary from '../components/Cart/CartSummary.jsx';
-
+// src/pages/CartPage.jsx
+import React from "react";
+import useCart from "../context/CartContext";
+import { img } from "../api/tmdb"; // ✅ for poster images
 
 export default function CartPage() {
-const { state } = useCart();
+  const cart = useCart();
+  const { items, removeItem, clear, updateQty } = cart; // ✅ use updateQty from context
 
+  const subtotal = items.reduce(
+    (sum, item) => sum + (item.price || 0) * (item.qty || 1),
+    0
+  );
 
-if (state.items.length === 0) {
-return (
-<section className="card">
-<h2>Your cart is empty</h2>
-<p>Add subscriptions or accessories to get started.</p>
-</section>
-);
-}
+  return (
+    <section className="stack container cart-layout">
+      <h2>Your Cart</h2>
 
+      {items.length === 0 ? (
+        <p className="muted">Cart is empty.</p>
+      ) : (
+        <div className="cart-grid">
+          {/* Left: items */}
+          <div className="cart-items">
+            {items.map((item) => (
+              <div key={item.id} className="cart-card">
+                <div className="thumb-wrap">
+                  <img
+                    src={
+                      item.poster_path
+                        ? img(item.poster_path, "w200")
+                        : item.image
+                    }
+                    alt={item.title}
+                  />
+                </div>
 
-return (
-<section className="cart">
-<div>
-{state.items.map((it) => <CartItem key={it.id} item={it} />)}
-</div>
-<CartSummary />
-</section>
-);
+                <div className="cart-info">
+                  <h3>{item.title}</h3>
+                  {item.price && <p className="price">${item.price.toFixed(2)}</p>}
+                  <p className="muted">
+                    {item.release_date?.slice(0, 4)} • ⭐{" "}
+                    {item.vote_average ?? "—"}
+                  </p>
+
+                  {/* ✅ Stepper only for accessories */}
+                  {item.type !== "subscription" && (
+                    <div className="stepper">
+                      <button onClick={() => updateQty(item.id, (item.qty || 1) - 1)}>
+                        -
+                      </button>
+                      <span>{item.qty || 1}</span>
+                      <button onClick={() => updateQty(item.id, (item.qty || 1) + 1)}>
+                        +
+                      </button>
+                    </div>
+                  )}
+
+                  <button
+                    className="btn danger"
+                    onClick={() => removeItem(item.id)}
+                  >
+                    Remove
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Right: summary */}
+          <aside className="cart-summary">
+            <h3>Order Summary</h3>
+            <p>
+              <strong>Subtotal:</strong> ${subtotal.toFixed(2)}
+            </p>
+            <button className="btn">Proceed to Checkout</button>
+            <button className="btn danger" onClick={clear}>
+              Clear Cart
+            </button>
+          </aside>
+        </div>
+      )}
+    </section>
+  );
 }

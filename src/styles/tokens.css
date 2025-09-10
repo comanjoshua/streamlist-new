@@ -1,18 +1,27 @@
 :root {
-/* Palette */
---bg: #0b0d12; /* deep slate */
---surface: #0f131a;
---surface-2: #161b24;
---border: #232a35;
---text: #d4dae3;
---text-muted: #9aa5b1;
---text-strong: #ffffff;
---accent: #3b82f6; /* blue-500 */
---success: #10b981; /* emerald-500 */
+  /* Light theme */
+  --bg: #ffffff;         /* 👈 set to pure white */
+  --surface: #ffffff;
+  --surface-2: #f8f9fa;
+  --surface-3: #f1f3f5;
+  --border: #d9dde7;
+  --text: #334155;
+  --text-strong: #0f172a;
+  --accent: #2563eb;
+  --accent-soft: #e6efff;
+  --accent-contrast: #0b2a6f;
+}
 
-
-/* Spacing */
---space-1: .25rem; --space-2: .5rem; --space-3: .75rem; --space-4: 1rem; --space-5: 1.5rem;
---radius: 12px;
---container: 1100px;
+:root[data-theme="dark"] {
+  /* Dark theme stays the same */
+  --bg: #0b1220;
+  --surface: #0f172a;
+  --surface-2: #111b31;
+  --surface-3: #1a2744;
+  --border: #233253;
+  --text: #cbd5e1;
+  --text-strong: #e2e8f0;
+  --accent: #60a5fa;
+  --accent-soft: #12325e;
+  --accent-contrast: #0b1220;
 }

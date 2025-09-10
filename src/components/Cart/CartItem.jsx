@@ -1,5 +1,5 @@
 import React from 'react';
-import { useCart } from '../../hooks/useCart';
+import useCart from '../../hooks/useCart';
 import { formatCurrency } from '../../utils/currency';
 import { isSubscription } from '../../utils/guards'; // ← add this
 import './Cart.css';
