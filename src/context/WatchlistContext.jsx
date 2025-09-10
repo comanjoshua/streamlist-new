@@ -5,12 +5,10 @@ const WatchlistCtx = createContext(null);
 
 function reducer(state, action) {
   switch (action.type) {
-    case "init":
-      return Array.isArray(action.items) ? action.items : [];
     case "add": {
       const m = action.movie;
       if (!m || !m.id) return state;
-      if (state.some((x) => x.id === m.id)) return state;
+      if (state.some((x) => x.id === m.id)) return state; // prevent duplicates
       return [m, ...state];
     }
     case "remove":
@@ -22,27 +20,24 @@ function reducer(state, action) {
   }
 }
 
-export function WatchlistProvider({ children }) {
-  const [list, dispatch] = useReducer(reducer, []);
+// Initialize directly from localStorage
+function initState() {
+  try {
+    const raw = localStorage.getItem("watchlist");
+    return raw ? JSON.parse(raw) : [];
+  } catch (err) {
+    console.error("Failed to parse watchlist:", err);
+    return [];
+  }
+}
 
-  // Load on mount
-  useEffect(() => {
-    try {
-      const raw = localStorage.getItem("watchlist");
-      if (raw) {
-        const parsed = JSON.parse(raw);
-        console.log("Loaded watchlist from localStorage:", parsed);
-        dispatch({ type: "init", items: parsed });
-      }
-    } catch (err) {
-      console.error("Failed to load watchlist:", err);
-    }
-  }, []);
+export function WatchlistProvider({ children }) {
+  const [list, dispatch] = useReducer(reducer, [], initState);
 
   // Save on change
   useEffect(() => {
     try {
-      console.log("Saving watchlist to localStorage:", list);
+      console.log("Saving watchlist:", list);
       localStorage.setItem("watchlist", JSON.stringify(list));
     } catch (err) {
       console.error("Failed to save watchlist:", err);

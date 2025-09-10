@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import NavBar from "./components/NavBar/NavBar";
-import { WatchlistProvider } from "./context/WatchlistContext"; // ✅ import provider
 
 // pages
 import Home from "./pages/Home";
@@ -35,20 +34,18 @@ export default function App() {
     <div className="app">
       <NavBar theme={theme} toggleTheme={toggleTheme} />
       <main className="page">
-        {/* ✅ Wrap everything that needs watchlist access */}
-        <WatchlistProvider>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/cart" element={<CartPage />} />
-            <Route path="/watchlist" element={<WatchlistPage />} />
-            <Route path="/store" element={<StorePage />} />
-            <Route path="/subscriptions" element={<SubscriptionsPage />} />
-            <Route path="/search" element={<SearchPage />} />
-            <Route path="/details/:id" element={<Details />} />
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
-        </WatchlistProvider>
+        {/* ✅ Just Routes — provider is already in index.js */}
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/cart" element={<CartPage />} />
+          <Route path="/watchlist" element={<WatchlistPage />} />
+          <Route path="/store" element={<StorePage />} />
+          <Route path="/subscriptions" element={<SubscriptionsPage />} />
+          <Route path="/search" element={<SearchPage />} />
+          <Route path="/details/:id" element={<Details />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
       </main>
     </div>
   );
