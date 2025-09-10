@@ -4,18 +4,15 @@ import { Link, NavLink } from "react-router-dom";
 
 // hooks
 import useCart from "../../context/CartContext";
-import { useWatchlist } from "../../context/WatchlistContext";
 
 // icons
 import {
   MdHome,
   MdSubscriptions,
   MdShoppingCart,
-  MdSearch,
   MdWbSunny,
   MdDarkMode,
   MdInfo,
-  MdBookmark,
   MdStore,
 } from "react-icons/md";
 
@@ -31,14 +28,6 @@ export default function NavBar({ theme: parentTheme, toggleTheme }) {
   }
   const cartItems = Array.isArray(cart?.items) ? cart.items : [];
   const cartCount = cartItems.reduce((n, i) => n + (Number(i?.qty) || 0), 0);
-
-  let wl = undefined;
-  try {
-    wl = useWatchlist?.() || undefined;
-  } catch {
-    wl = undefined;
-  }
-  const watchlistCount = Array.isArray(wl?.list) ? wl.list.length : 0;
 
   // ---- theme ----
   const [theme, setTheme] = useState(parentTheme || "light");
@@ -59,7 +48,7 @@ export default function NavBar({ theme: parentTheme, toggleTheme }) {
       <div className="nav__inner">
         {/* brand */}
         <Link to="/" className="brand">
-          StreamList
+          EZ Tech
         </Link>
 
         {/* right side */}
@@ -68,19 +57,6 @@ export default function NavBar({ theme: parentTheme, toggleTheme }) {
             <NavLink to="/" end className={pill}>
               <MdHome size={16} />
               <span>Home</span>
-            </NavLink>
-
-            <NavLink to="/search" className={pill}>
-              <MdSearch size={16} />
-              <span>Search</span>
-            </NavLink>
-
-            <NavLink to="/watchlist" className={pill}>
-              <MdBookmark size={16} />
-              <span>Watchlist</span>
-              {watchlistCount > 0 && (
-                <span className="nav__bug">{watchlistCount}</span>
-              )}
             </NavLink>
 
             <NavLink to="/store" className={pill}>

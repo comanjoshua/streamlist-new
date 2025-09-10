@@ -29,7 +29,8 @@ const list = [
           service: "Social Media Sharing Subscription",
           serviceInfo: "Share your list",
           price: 2.99,
-          img: "https://cdn.creazilla.com/photos/3730387/social-media-1908766_1280-photo-md.jpeg",
+          img: "https://cdn-icons-png.flaticon.com/512/4187/4187236.png",
+          
           amount: 1,
         },
         {

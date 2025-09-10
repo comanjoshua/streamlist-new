@@ -1,5 +1,6 @@
 // src/pages/CartPage.jsx
 import React from "react";
+import { Link } from "react-router-dom";
 import useCart from "../context/CartContext";
 import { img } from "../api/tmdb"; // ✅ for poster images
 
@@ -37,7 +38,9 @@ export default function CartPage() {
 
                 <div className="cart-info">
                   <h3>{item.title}</h3>
-                  {item.price && <p className="price">${item.price.toFixed(2)}</p>}
+                  {item.price && (
+                    <p className="price">${item.price.toFixed(2)}</p>
+                  )}
                   <p className="muted">
                     {item.release_date?.slice(0, 4)} • ⭐{" "}
                     {item.vote_average ?? "—"}
@@ -46,11 +49,19 @@ export default function CartPage() {
                   {/* ✅ Stepper only for accessories */}
                   {item.type !== "subscription" && (
                     <div className="stepper">
-                      <button onClick={() => updateQty(item.id, (item.qty || 1) - 1)}>
+                      <button
+                        onClick={() =>
+                          updateQty(item.id, (item.qty || 1) - 1)
+                        }
+                      >
                         -
                       </button>
                       <span>{item.qty || 1}</span>
-                      <button onClick={() => updateQty(item.id, (item.qty || 1) + 1)}>
+                      <button
+                        onClick={() =>
+                          updateQty(item.id, (item.qty || 1) + 1)
+                        }
+                      >
                         +
                       </button>
                     </div>
@@ -73,7 +84,12 @@ export default function CartPage() {
             <p>
               <strong>Subtotal:</strong> ${subtotal.toFixed(2)}
             </p>
-            <button className="btn">Proceed to Checkout</button>
+
+            {/* ✅ Navigate to Credit Card Page */}
+            <Link to="/checkout" className="btn">
+              Proceed to Checkout
+            </Link>
+
             <button className="btn danger" onClick={clear}>
               Clear Cart
             </button>

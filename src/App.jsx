@@ -7,21 +7,23 @@ import NavBar from "./components/NavBar/NavBar";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import CartPage from "./pages/CartPage";
-import WatchlistPage from "./pages/Watchlist";
 import StorePage from "./pages/Store";
 import SubscriptionsPage from "./pages/Subscriptions";
 import Details from "./pages/Details";
-import SearchPage from "./pages/Search";
+import CreditCardPage from "./pages/CreditCardPage"; 
+import ConfirmationPage from "./pages/ConfirmationPage";
 
 export default function App() {
   const [theme, setTheme] = useState("light");
 
+  // load theme on mount
   useEffect(() => {
     const saved = localStorage.getItem("theme") || "light";
     setTheme(saved);
     document.documentElement.classList.add(saved);
   }, []);
 
+  // toggle theme
   const toggleTheme = () => {
     const next = theme === "dark" ? "light" : "dark";
     document.documentElement.classList.remove(theme);
@@ -34,16 +36,25 @@ export default function App() {
     <div className="app">
       <NavBar theme={theme} toggleTheme={toggleTheme} />
       <main className="page">
-        {/* ✅ Just Routes — provider is already in index.js */}
         <Routes>
+          {/* public pages */}
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
-          <Route path="/cart" element={<CartPage />} />
-          <Route path="/watchlist" element={<WatchlistPage />} />
+
+          {/* services + cart */}
           <Route path="/store" element={<StorePage />} />
           <Route path="/subscriptions" element={<SubscriptionsPage />} />
-          <Route path="/search" element={<SearchPage />} />
+          <Route path="/cart" element={<CartPage />} />
+
+          {/* checkout */}
+          <Route path="/checkout" element={<CreditCardPage />} /> 
+          <Route path="/confirmation" element={<ConfirmationPage />} />
+
+
+          {/* details */}
           <Route path="/details/:id" element={<Details />} />
+
+          {/* fallback */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>
