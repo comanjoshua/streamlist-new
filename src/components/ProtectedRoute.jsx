@@ -1,8 +1,15 @@
+// src/components/ProtectedRoute.jsx
+import React from "react";
 import { Navigate, useLocation } from "react-router-dom";
-import { useAppState } from "../context/AppState";
+import { auth } from "../firebaseConfig";
 
 export default function ProtectedRoute({ children }) {
-  const { isAuthed } = useAppState();
-  const loc = useLocation();
-  return isAuthed ? children : <Navigate to="/login" replace state={{ from: loc }} />;
+  const user = auth.currentUser;
+  const location = useLocation();
+
+  if (!user) {
+    return <Navigate to="/login" replace state={{ from: location }} />;
+  }
+
+  return children;
 }

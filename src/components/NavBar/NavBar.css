@@ -19,71 +19,59 @@
   font-weight: 800;
   font-size: 1.4rem;
   letter-spacing: 0.3px;
-  color: var(--text-strong);
+  color: var(--text);
+  text-decoration: none;
 }
 
+/* Right side (links + logout) */
 .nav__right {
   display: flex;
   align-items: center;
-  gap: 1rem;
-}
-
-/* Links */
-.nav__links {
-  display: flex;
   gap: 0.75rem;
 }
 
+/* Base pill */
 .pill {
-  position: relative; /* ✅ for badge positioning */
   display: inline-flex;
   align-items: center;
-  gap: 0.3rem;
-  padding: 0.4rem 0.7rem;
+  justify-content: center;
+  padding: 0.4rem 1rem;
   border-radius: 9999px;
+  font-weight: 600;
   color: var(--text);
   text-decoration: none;
   transition: background 0.2s, color 0.2s;
 }
 
+/* Hover → light gray */
 .pill:hover {
-  background: var(--surface-2);
-  color: var(--text-strong);
+  background: #f3f4f6; /* Tailwind gray-100 */
 }
 
+/* Active (selected) → gray pill */
 .pill--active {
-  background: var(--surface-2);
-  color: var(--text-strong);
-  font-weight: 600;
+  background: #d1d5db; /* Tailwind gray-300 */
+  color: #111827;      /* dark text */
 }
 
-/* Bug (badge) */
-.nav__bug {
+/* Cart link */
+.cart-link {
+  position: relative;
+}
+
+/* Cart bug badge */
+.cart-bug {
   position: absolute;
-  top: -0.3rem;
-  right: -0.4rem;
-  width: 1rem;
-  height: 1rem;
+  top: -6px;
+  right: -8px;
   background: red;
-  color: #fff;
-  font-size: 0.65rem;
+  color: white;
+  font-size: 0.7rem;
   font-weight: 700;
-  border-radius: 50%;      /* ✅ perfect circle */
-  text-align: center;
   line-height: 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 0 0 2px var(--surface); /* ring for contrast */
-}
-
-/* Theme toggle button */
-.themeToggle {
-  margin-left: 1rem;
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  border-radius: 9999px;
+  padding: 0 6px;
+  min-width: 1rem;
+  text-align: center;
+  box-shadow: 0 0 0 2px #fff;
 }

@@ -1,12 +1,11 @@
-// src/pages/CartPage.jsx
 import React from "react";
 import { Link } from "react-router-dom";
 import useCart from "../context/CartContext";
-import { img } from "../api/tmdb"; // ✅ for poster images
+import { img } from "../api/tmdb";
 
 export default function CartPage() {
   const cart = useCart();
-  const { items, removeItem, clear, updateQty } = cart; // ✅ use updateQty from context
+  const { items, removeItem, clear, updateQty } = cart;
 
   const subtotal = items.reduce(
     (sum, item) => sum + (item.price || 0) * (item.qty || 1),
@@ -42,11 +41,11 @@ export default function CartPage() {
                     <p className="price">${item.price.toFixed(2)}</p>
                   )}
                   <p className="muted">
-                    {item.release_date?.slice(0, 4)} • ⭐{" "}
+                    {item.release_date?.slice(0, 4)} • Rating:{" "}
                     {item.vote_average ?? "—"}
                   </p>
 
-                  {/* ✅ Stepper only for accessories */}
+                  {/* Stepper only for accessories */}
                   {item.type !== "subscription" && (
                     <div className="stepper">
                       <button
@@ -85,7 +84,6 @@ export default function CartPage() {
               <strong>Subtotal:</strong> ${subtotal.toFixed(2)}
             </p>
 
-            {/* ✅ Navigate to Credit Card Page */}
             <Link to="/checkout" className="btn">
               Proceed to Checkout
             </Link>

@@ -15,10 +15,14 @@ function reducer(state, action) {
       }
 
       // If accessory exists, bump qty
-      const existing = state.find((i) => i.id === item.id && i.type !== "subscription");
+      const existing = state.find(
+        (i) => i.id === item.id && i.type !== "subscription"
+      );
       if (existing) {
         return state.map((i) =>
-          i.id === item.id ? { ...i, qty: (i.qty || 1) + (item.qty || 1) } : i
+          i.id === item.id
+            ? { ...i, qty: (i.qty || 1) + (item.qty || 1) }
+            : i
         );
       }
 
@@ -43,7 +47,7 @@ function reducer(state, action) {
   }
 }
 
-// 🔑 Load cart synchronously at startup
+// Load cart from localStorage
 function initCart() {
   try {
     const raw = localStorage.getItem("cart");

@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Smooth transitions when toggling dark/light */
+/* Smooth transitions */
 html {
   transition: background-color 0.3s, color 0.3s;
 }
@@ -14,98 +14,54 @@ body {
   padding: 0;
 }
 
+html,
+body,
+#root {
+  min-height: 100%;
+  background: var(--surface);
+  color: var(--text);
+}
+
+/* Container utility */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
 /* Page base */
 .page {
   padding: 1.5rem;
 }
 
-/* Framed box style */
-.page--box {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 1rem; /* rounded corners */
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-}
+/* ---- Theme variables ---- */
 :root {
   --surface: #ffffff;
-  --surface-2: #f3f4f6;
-  --border: #d1d5db;
-  --text: #111827;
-  --text-strong: #000000;
+  --text: #000000;
+  --border: #e0e0e0;
   --accent: #2563eb;
+
+  --btn-bg: #e5e7eb;       /* gray */
+  --btn-hover: #d1d5db;    /* darker gray */
+  --btn-disabled: #f3f4f6; /* very light gray */
+  --btn-text: #111827;     /* dark text */
 }
 
-.dark {
-  --surface: #1f2937;
-  --surface-2: #374151;
-  --border: #4b5563;
-  --text: #d1d5db;
-  --text-strong: #ffffff;
-  --accent: #3b82f6;
+/* ---- Typography helpers ---- */
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
 }
 
-body {
-  background-color: var(--surface);
-  color: var(--text);
-  transition: background-color 0.3s, color 0.3s;
-}
-
-/* Grid layout for search results */
-.search-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 1.5rem;
-  margin-top: 1.5rem;
-}
-
-.movie-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 0.75rem;
-  padding: 1rem;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.movie-card img {
-  width: 100%;
-  height: auto;
-  border-radius: 0.5rem;
-  margin-bottom: 0.75rem;
-}
-
-.movie-card h2 {
-  font-size: 1rem;
-  font-weight: 600;
-  margin-bottom: 0.25rem;
-}
-
-.movie-card p {
+.muted {
+  color: #6b7280; /* gray-500 */
   font-size: 0.85rem;
-  margin: 0.25rem 0;
-  color: var(--text);
 }
 
-/* Limit overview length */
-.movie-card .overview {
-  display: -webkit-box;
-  -webkit-line-clamp: 3;   /* show max 3 lines */
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  margin-bottom: 0.5rem;
-}
-
-/* Buttons inside card */
-.movie-card .actions {
-  display: flex;
-  justify-content: center;
-  gap: 0.5rem;
-  margin-top: auto;
-}
-/* Buttons - base style */
+/* ---- Buttons ---- */
 .btn {
   background: var(--btn-bg);
   color: var(--btn-text);
@@ -123,12 +79,10 @@ body {
   transition: background 0.2s ease, transform 0.1s ease;
 }
 
-/* Hover */
 .btn:hover {
   background: var(--btn-hover);
 }
 
-/* Disabled */
 .btn:disabled {
   background: var(--btn-disabled);
   color: var(--text);
@@ -136,7 +90,6 @@ body {
   opacity: 0.7;
 }
 
-/* Danger variant */
 .btn.danger {
   background: #dc2626; /* red */
   color: #fff;
@@ -145,74 +98,84 @@ body {
   background: #b91c1c;
 }
 
-/* ---- Theme variables ---- */
-
-/* Light mode buttons */
-:root {
-  --btn-bg: #e5e7eb;       /* light gray (tailwind gray-200) */
-  --btn-hover: #d1d5db;    /* slightly darker gray */
-  --btn-disabled: #f3f4f6; /* very light gray */
-  --btn-text: #111827;     /* dark text */
-}
-
-/* Dark mode buttons */
-.dark {
-  --btn-bg: #3b82f6;       /* blue-500 */
-  --btn-hover: #2563eb;    /* blue-600 */
-  --btn-disabled: #1e40af; /* muted blue */
-  --btn-text: #ffffff;
-}
-
-/* Cart layout */
+/* ---- Cart layout ---- */
 .cart-grid {
   display: grid;
-  grid-template-columns: 2fr 1fr;
+  grid-template-columns: 3fr 1fr;
   gap: 2rem;
   align-items: start;
 }
 
-.cart-card {
-  display: flex;
+/* Items grid - Netflix style */
+.cart-items {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   gap: 1rem;
-  padding: 1rem;
-  border: 1px solid var(--border);
-  border-radius: 0.75rem;
-  background: var(--surface);
-  margin-bottom: 1rem;
 }
 
-/* Thumbnail */
-.thumb-wrap img {
-  width: 100px;
+/* Responsive breakpoints */
+@media (max-width: 1024px) {
+  .cart-grid {
+    grid-template-columns: 1fr; /* stack summary on smaller screens */
+  }
+  .cart-items {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 640px) {
+  .cart-items {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Cart item card */
+.cart-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: 0.5rem;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+.cart-card:hover {
+  transform: scale(1.05);
+  z-index: 5;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+}
+
+/* Thumbnail images */
+.thumb-wrap img {
+  width: 100%;
+  height: 220px;
   object-fit: cover;
+  border-radius: 0.5rem 0.5rem 0 0;
 }
 
 /* Info */
 .cart-info {
-  flex: 1;
+  padding: 0.5rem;
+  text-align: center;
 }
-
 .cart-info h3 {
-  margin: 0 0 0.25rem;
-  font-weight: 600;
+  font-size: 0.9rem;
+  margin: 0.25rem 0;
 }
-
 .cart-info .price {
-  font-weight: 700;
+  font-weight: 600;
   margin: 0.25rem 0;
 }
 
 /* Stepper */
-/* Stepper controls */
 .stepper {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 0.75rem;
-  margin: 0.75rem 0;
+  gap: 0.5rem;
+  margin: 0.5rem 0;
 }
-
 .stepper button {
   background: var(--btn-bg);
   color: var(--btn-text);
@@ -221,15 +184,13 @@ body {
   width: 2rem;
   height: 2rem;
   cursor: pointer;
-  font-size: 1.2rem;
+  font-size: 1rem;
   font-weight: 600;
   transition: background 0.2s ease;
 }
-
 .stepper button:hover {
   background: var(--btn-hover);
 }
-
 .stepper button:disabled {
   background: var(--btn-disabled);
   color: var(--text);
@@ -237,12 +198,12 @@ body {
   opacity: 0.7;
 }
 
-/* Summary box */
+/* Cart summary */
 .cart-summary {
   border: 1px solid var(--border);
   border-radius: 0.75rem;
   padding: 1rem;
-  background: var(--surface-2);
+  background: var(--surface);
   display: flex;
   flex-direction: column;
   gap: 0.75rem;

@@ -1,104 +1,68 @@
-// src/components/NavBar/NavBar.jsx
-import React, { useEffect, useState } from "react";
-import { Link, NavLink } from "react-router-dom";
-
-// hooks
+import React from "react";
+import { NavLink } from "react-router-dom";
+import { signOut } from "firebase/auth";
+import { auth } from "../../firebaseConfig";
 import useCart from "../../context/CartContext";
-
-// icons
-import {
-  MdHome,
-  MdSubscriptions,
-  MdShoppingCart,
-  MdWbSunny,
-  MdDarkMode,
-  MdInfo,
-  MdStore,
-} from "react-icons/md";
-
 import "./NavBar.css";
 
-export default function NavBar({ theme: parentTheme, toggleTheme }) {
-  // ---- counts ----
-  let cart = undefined;
-  try {
-    cart = typeof useCart === "function" ? useCart() : undefined;
-  } catch {
-    cart = undefined;
-  }
-  const cartItems = Array.isArray(cart?.items) ? cart.items : [];
-  const cartCount = cartItems.reduce((n, i) => n + (Number(i?.qty) || 0), 0);
+export default function NavBar({ user }) {
+  const { items } = useCart();
+  const count = items.reduce((sum, i) => sum + (i.qty || 1), 0);
 
-  // ---- theme ----
-  const [theme, setTheme] = useState(parentTheme || "light");
-  useEffect(() => {
-    const saved = localStorage.getItem("theme") || parentTheme || "light";
-    setTheme(saved);
-  }, [parentTheme]);
-
-  const handleToggleTheme = () => {
-    if (toggleTheme) toggleTheme();
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      window.location.href = "/login";
+    } catch (err) {
+      console.error("Logout error:", err);
+    }
   };
 
-  // pill styling function
-  const pill = ({ isActive }) => `pill${isActive ? " pill--active" : ""}`;
-
   return (
-    <header className="nav">
+    <nav className="nav">
       <div className="nav__inner">
-        {/* brand */}
-        <Link to="/" className="brand">
+        {/* Brand left */}
+        <NavLink to="/" className="brand">
           EZ Tech
-        </Link>
+        </NavLink>
 
-        {/* right side */}
+        {/* Right side links and controls */}
         <div className="nav__right">
-          <nav className="nav__links">
-            <NavLink to="/" end className={pill}>
-              <MdHome size={16} />
-              <span>Home</span>
-            </NavLink>
-
-            <NavLink to="/store" className={pill}>
-              <MdStore size={16} />
-              <span>Store</span>
-            </NavLink>
-
-            <NavLink to="/subscriptions" className={pill}>
-              <MdSubscriptions size={16} />
-              <span>Subscriptions</span>
-            </NavLink>
-
-            <NavLink to="/cart" className={pill}>
-              <MdShoppingCart size={16} />
-              <span>Cart</span>
-              {cartCount > 0 && (
-                <span className="nav__bug">{cartCount}</span>
-              )}
-            </NavLink>
-
-            <NavLink to="/about" className={pill}>
-              <MdInfo size={16} />
-              <span>About</span>
-            </NavLink>
-          </nav>
-
-          {/* theme toggle */}
-          <button
-            type="button"
-            className="themeToggle"
-            onClick={handleToggleTheme}
-            aria-label="Toggle theme"
-            title="Toggle theme"
+          <NavLink
+            to="/store"
+            className={({ isActive }) =>
+              `pill ${isActive ? "pill--active" : ""}`
+            }
           >
-            {theme === "dark" ? (
-              <MdWbSunny size={20} style={{ color: "#facc15" }} />
-            ) : (
-              <MdDarkMode size={20} style={{ color: "#1e3a8a" }} />
-            )}
-          </button>
+            Store
+          </NavLink>
+
+          <NavLink
+            to="/subscriptions"
+            className={({ isActive }) =>
+              `pill ${isActive ? "pill--active" : ""}`
+            }
+          >
+            Subscriptions
+          </NavLink>
+
+          <NavLink
+            to="/cart"
+            className={({ isActive }) =>
+              `pill cart-link ${isActive ? "pill--active" : ""}`
+            }
+          >
+            Cart
+            {count > 0 && <span className="cart-bug">{count}</span>}
+          </NavLink>
+
+          {user && (
+            <button onClick={handleLogout} className="pill logout-btn">
+              Logout
+            </button>
+          )}
         </div>
       </div>
-    </header>
+    </nav>
   );
 }
